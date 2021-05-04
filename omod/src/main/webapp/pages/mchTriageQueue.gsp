@@ -1,12 +1,19 @@
 <%
     ui.decorateWith("appui", "standardEmrPage", [title: "Mch Triage Queue"])
-    ui.includeCss("uicommons", "datatables/dataTables_jui.css")
-    ui.includeCss("coreapps", "patientsearch/patientSearchWidget.css")
-    ui.includeJavascript("patientqueueapp", "jquery.dataTables.min.js")
-    ui.includeJavascript("patientqueueapp", "queue.js")
-    ui.includeJavascript("patientqueueapp", "jquery.session.js")
+	ui.includeCss("ehrconfigs", "referenceapplication.css")
+	ui.includeCss("ehrconfigs", "onepcssgrid.css")
+
+	ui.includeJavascript("ehrconfigs", "moment.js")
+	ui.includeJavascript("ehrconfigs", "jquery.dataTables.min.js")
+	ui.includeJavascript("ehrconfigs", "jq.browser.select.js")
+	ui.includeJavascript("ehrconfigs", "knockout-3.4.0.js")
+	ui.includeJavascript("ehrconfigs", "jquery-ui-1.9.2.custom.min.js")
+	ui.includeJavascript("ehrconfigs", "underscore-min.js")
+	ui.includeJavascript("ehrconfigs", "emr.js")
+	ui.includeJavascript("patientqueueapp", "queue.js")
 %>
 <script>
+
     function handlePatientRowSelection() {
         this.handle = function (row) {
             window.location = ui.pageLink("mchapp", "triage", { "patientId" : row.patientId, "queueId" : row.id })

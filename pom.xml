@@ -6,7 +6,7 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>EHR Patient Queue App Module</name>
-	<description>patient queue module for the EHR work</description>
+	<description>Patient queue module for the EHR work has Triage and OPD applications</description>
 	<url>https://wiki.openmrs.org/display/docs/Patient+Queue+Ui+Module+Module</url>
 	
 	<developers>
@@ -33,7 +33,7 @@
 	</modules>
 	
 	<properties>
-		<openMRSVersion>1.9.7</openMRSVersion>
+		<openMRSVersion>1.12.0</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<kenyauiVersion>2.1.1</kenyauiVersion>
 		<kenyacoreVersion>2.4.1</kenyacoreVersion>
@@ -218,6 +218,27 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>com.coveo</groupId>
+					<artifactId>fmt-maven-plugin</artifactId>
+					<version>2.8</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>format</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>com.googlecode.maven-java-formatter-plugin</groupId>
+					<artifactId>maven-java-formatter-plugin</artifactId>
+					<executions>
+						<execution>
+							<phase>none</phase>
+						</execution>
+					</executions>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>

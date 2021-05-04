@@ -65,13 +65,13 @@ public class PatientQueueFragmentController {
 													@RequestParam("mchExaminationConceptId") Integer mchExaminationConceptId,UiUtils ui){
 		Concept mchExamRoomConcept = Context.getConceptService().getConceptByUuid(PatientQueueUtils.EXAM_ROOM_CONCEPT_UUID);
 
-		Concept mchImmunizationRoomConcept = Context.getConceptService().getConceptByUuid(PatientQueueUtils.IMMUNIZATION_ROOM_CONCEPT_UUID);
+		//Concept mchImmunizationRoomConcept = Context.getConceptService().getConceptByUuid(PatientQueueUtils.IMMUNIZATION_ROOM_CONCEPT_UUID);
 		Concept fpRoomConcept = Context.getConceptService().getConceptByUuid(PatientQueueUtils.FP_ROOM_CONCEPT_UUID);
 
 		List<OpdPatientQueue> patientQueues = new ArrayList<OpdPatientQueue>();
 		patientQueues.addAll(Context.getService(PatientQueueService.class).listOpdPatientQueue("", mchConceptId, "", 0, 0));
 		patientQueues.addAll(Context.getService(PatientQueueService.class).listOpdPatientQueue("", fpRoomConcept.getId(), "", 0, 0));
-		patientQueues.addAll(Context.getService(PatientQueueService.class).listOpdPatientQueue("", mchImmunizationRoomConcept.getId(), "", 0, 0));
+		//patientQueues.addAll(Context.getService(PatientQueueService.class).listOpdPatientQueue("", mchImmunizationRoomConcept.getId(), "", 0, 0));
 
 		Collections.sort(patientQueues, new Comparator<OpdPatientQueue>() {
 			public int compare(OpdPatientQueue q1, OpdPatientQueue q2) {
@@ -97,10 +97,7 @@ public class PatientQueueFragmentController {
 			patientInQueue.put("id", patientQueue.getId());
 
 			Concept oPdConcept = patientQueue.getOpdConcept();
-			if(oPdConcept.equals(mchImmunizationRoomConcept)){
-				patientInQueue.put("clinic","Immunization");
-			}
-			else if (oPdConcept.equals(fpRoomConcept)){
+			 if (oPdConcept.equals(fpRoomConcept)){
 				patientInQueue.put("clinic","FP");
 			}
 			else if(oPdConcept.equals(mchExamRoomConcept))
@@ -119,19 +116,19 @@ public class PatientQueueFragmentController {
 	public SimpleObject getPatientsInQueue(@RequestParam("opdId") Integer opdId, @RequestParam(value = "query", required = false) String query, UiUtils ui) {
 		Concept queueConcept = Context.getConceptService().getConcept(opdId);
 		ConceptAnswer queueAnswer = Context.getService(PatientQueueService.class).getConceptAnswer(queueConcept);
-		String conceptAnswerName = queueAnswer.getConcept().getName().toString();
+
 
 		SimpleObject patientQueueData = null;
 
-		if (conceptAnswerName.equals("TRIAGE")) {
+		if (queueAnswer != null && queueAnswer.getConcept() != null && queueAnswer.getConcept().getName().toString().equals("TRIAGE")) {
 			List<TriagePatientQueue> patientQueues = Context.getService(PatientQueueService.class).listTriagePatientQueue(query.trim(), opdId, "", 0, 0);
 			List<SimpleObject> patientQueueObject = SimpleObject.fromCollection(patientQueues, ui, "patientName", "patientIdentifier", "age", "sex", "status", "visitStatus","patient.id", "id");
 			patientQueueData = SimpleObject.create("data", patientQueueObject, "user", "triageUser");
-		} else if (conceptAnswerName.equals("OPD WARD")) {
+		} else if (queueAnswer != null && queueAnswer.getConcept() != null && queueAnswer.getConcept().getName().toString().equals("OPD WARD")) {
 			List<OpdPatientQueue> patientQueues = Context.getService(PatientQueueService.class).listOpdPatientQueue(query.trim(), opdId, "", 0, 0);
 			List<SimpleObject> patientQueueObject = SimpleObject.fromCollection(patientQueues, ui, "patientName", "patientIdentifier", "age", "sex", "status", "visitStatus","patient.id", "id", "referralConcept.conceptId");
 			patientQueueData = SimpleObject.create("data", patientQueueObject, "user", "opdUser");
-		} else if(conceptAnswerName.equals("SPECIAL CLINIC")) {
+		} else if(queueAnswer != null && queueAnswer.getConcept() != null && queueAnswer.getConcept().getName().toString().equals("SPECIAL CLINIC")) {
 			List<OpdPatientQueue> patientQueues = Context.getService(PatientQueueService.class).listOpdPatientQueue(query.trim(), opdId, "", 0, 0);
 			List<SimpleObject> patientQueueObject = SimpleObject.fromCollection(patientQueues, ui, "patientName", "patientIdentifier", "age", "sex", "status", "visitStatus","patient.id", "id", "referralConcept.conceptId");
 			patientQueueData = SimpleObject.create("data", patientQueueObject, "user", "opdUser");
